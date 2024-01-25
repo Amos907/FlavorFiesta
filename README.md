@@ -8,15 +8,16 @@ As a member of the KontorVA talent pool, you'll have the chance to showcase your
 
 **Why Join the KontorVA Talent Pool?**
 
-- **Expert Support: ** Join an international team of top experts who will inspire and support you in working on projects that have a global impact.
+- **Expert Support:** Join an international team of top experts who will inspire and support you in working on projects that have a global impact.
 - **Diverse Opportunities:**  Work on projects spanning various industries, from technology and logistics to e-commerce, influencing millions of users and revenue streams.
-- **Dynamic Environment: ** Embrace a culture that values humility, pragmatism, and a passion for what we do. We believe in having fun while achieving excellence, and we thrive in a fast-paced environment that welcomes challenges.
-- **Knowledge Sharing: ** Engage in a culture that encourages the sharing of knowledge and continuous learning. We believe in flexibility and the idea that anything is possible.
-- **Growth and Development: ** Find a second home at KontorVA, where growth and career development are prioritized.
+- **Dynamic Environment:** Embrace a culture that values humility, pragmatism, and a passion for what we do. We believe in having fun while achieving excellence, and we thrive in a fast-paced environment that welcomes challenges.
+- **Knowledge Sharing:** Engage in a culture that encourages the sharing of knowledge and continuous learning. We believe in flexibility and the idea that anything is possible.
+- **Growth and Development:** Find a second home at KontorVA, where growth and career development are prioritized.
 
 This repository represents the first admission test for joining the KontorVA talent pool. We invite you to showcase your skills and join us in making a significant impact in the world of remote support for startups and SMEs.
 
 Please ensure your responses are provided in the English language. We look forward to seeing your skills, expertise and experience in action!
+
 #Code Challenge 
 
 **Progressive Web App Offline Recipe Keeper:**
