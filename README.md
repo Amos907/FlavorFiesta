@@ -18,7 +18,7 @@ This repository represents the first admission test for joining the KontorVA tal
 
 Please ensure your responses are provided in the English language. We look forward to seeing your skills, expertise and experience in action!
 
-#Code Challenge 
+# Code Challenge 
 
 **Progressive Web App Offline Recipe Keeper:**
 
