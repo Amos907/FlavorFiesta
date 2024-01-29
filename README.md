@@ -64,7 +64,6 @@ _**Evaluation Criteria:**_
 
 _**Submission Guidelines:**_
 
-- Fork this repository and attempt this challenge
 - Create a pull request using the base "kontorva\_lab"
 - Title format "Web Challenge - FIRST\_NAME LAST\_NAME"
 - Write a description about your implementation and submit a pull request with your solution.
