@@ -11,6 +11,10 @@ module.exports = {
     extend: {
       colors: {
         ...defaultTheme.colors,
+
+        primary: "#2D4F8F",
+        secondary: "#EAEAEA",
+        naplesyellow: "#F9DC5C",
       },
     },
   },

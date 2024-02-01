@@ -8,7 +8,7 @@ import { IconSearch } from "@tabler/icons-react";
 const TopNav = () => {
   return (
     <>
-      <nav className="fixed top-0 z-[1000] left-0 right-0 m-4">
+      <nav className="fixed top-0 z-[1000] left-0 right-0 p-2 bg-secondary w-screen lg:px-40">
         <section className="">
           <div className="flex justify-between items-center">
             <div>
@@ -46,7 +46,7 @@ const TopNav = () => {
               <figure className="h-7 w-7 relative cursor-pointer">
                 <Image
                   className="rounded-lg"
-                  src="/images/icons/heart.svg"
+                  src="/images/icons/cart-filled.svg"
                   style={{ objectFit: "cover" }}
                   fill
                   sizes="100vw"

@@ -25,29 +25,20 @@ export default function Home() {
     setFact((initialFact) => (initialFact = Math.round(new_fact)));
   }, []);
   return (
-    <main>
+    <main main className="lg:px-40">
       <TopNav />
-      <div className="m-4">
+      <div className="py-0">
         {fact ? (
-          <div className="border rounded-md px-5 py-3 shadow-md">
-            <div className="flex justify-between items-center pb-2">
-              <figure className="w-7 h-7 relative">
-                <Image
-                  className="rounded-lg"
-                  src="/images/icons/idea.svg"
-                  style={{ objectFit: "cover" }}
-                  fill
-                  sizes="100vh"
-                  alt=""
-                />
-              </figure>
-
-              <p className="text-xl font-serif  text-blue-600">Fun Fact</p>
+          <div className="rounded-md py-3 md:flex items-center justify-center md:space-x-8">
+            <div className="md:w-80 text-center py-2">
+              <p className="text-xl font-sans font-semibold text-primary lg:text-2xl">
+                {fruitsData[fact].fact}
+              </p>
             </div>
-            <div className="space-y-2 m-2">
-              <figure className="h-48 w-full relative">
+            <div className="space-y-2 flex justify-center">
+              <figure className="h-48 w-80 lg:h-64 relative">
                 <Image
-                  className="rounded-md"
+                  className="rounded-sm"
                   src={fruitsData[fact].image}
                   alt="Fruit Image"
                   style={{ objectFit: "cover" }}
@@ -55,11 +46,6 @@ export default function Home() {
                   sizes="100vh"
                 />
               </figure>
-              <div className="">
-                <p className="text-xl font-serif text-gray-700 font-semibold">
-                  {fruitsData[fact].fact}
-                </p>
-              </div>
             </div>
           </div>
         ) : (
@@ -68,23 +54,29 @@ export default function Home() {
       </div>
 
       <div className="m-4">
-        <p className="text-2xl font-bold pt-4 font-serif">Cuisine of the Day</p>
-        <HorizScrollContainer>
-          {faker.datatype.array(3).map((item) => (
-            <div className="" key={item}>
-              <FlierCard />
-            </div>
-          ))}
-        </HorizScrollContainer>
+        <p className="text-xl font-bold font-sans text-primary py-2">
+          Cuisine of the Day
+        </p>
+        <div className="bg-gray-100 pt-2 px-2">
+          <HorizScrollContainer>
+            {faker.datatype.array(9).map((item) => (
+              <div className="" key={item}>
+                <FlierCard />
+              </div>
+            ))}
+          </HorizScrollContainer>
+        </div>
       </div>
 
       <div className="m-4">
-        <p className="text-2xl font-bold pt-4 font-serif">Popular Recipes</p>
+        <p className="text-xl font-bold font-sans text-primary py-2">
+          Popular Recipes
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="space-y-2 md:grid grid-cols-3 lg:grid-cols-4 gap-4">
           {faker.datatype.array(15).map((item) => (
-            <div className="bg-white rounded-[0.3rem]" key={item}>
-              <figure className="h-56 w-full rounded-t bg-gray-200 relative">
+            <div className="rounded-[0.3rem] border p-2" key={item}>
+              <figure className="h-56 w-full rounded-t relative">
                 <Image
                   className="rounded"
                   src={faker.image.food(512, 512, consume_data)}
@@ -93,14 +85,14 @@ export default function Home() {
                   sizes="100vw"
                   alt=""
                 />
-                <div className="absolute top-1 left-1">
+                {/* <div className="absolute top-1 left-1">
                   <Badge>{faker.datatype.number(100)} Points</Badge>
-                </div>
+                </div> */}
 
                 <div className="absolute -bottom-3 right-1">
                   <ActionIcon
                     size="lg"
-                    color="grape"
+                    className="bg-white shadow-md"
                     variant="default"
                     radius="xl"
                   >
@@ -110,30 +102,17 @@ export default function Home() {
               </figure>
 
               <div className="w-full p-3">
-                <p className="text-dark-300 font-bold capitalize text-sm mt-1">
+                <p className="text-lg font-bold capitalize mt-1">
                   {faker.lorem.words(2)}
                 </p>
 
-                <div className="text-dark-100 capitalize text-xs mt-[0.5]">
+                <div className="text-gray-700 capitalize text-xs mt-[0.5]">
                   {faker.lorem.sentence()}
                 </div>
 
-                <div className="w-full mt-2 flex items-center space-x-1">
-                  <Text color="orange">
-                    {faker.datatype
-                      .array(faker.datatype.number({ min: 1, max: 5 }))
-                      .map((item) => (
-                        <i className="fa-solid fa-star" key={item}></i>
-                      ))}
-                  </Text>
-                  <span className="text-xs">
-                    ({faker.datatype.number(1000)})
-                  </span>
-                </div>
-
                 <div className="mt-3">
-                  <Link href="">
-                    <Button fullWidth variant="light">
+                  <Link href={`/recipe/${faker.number.int(10000)}`}>
+                    <Button fullWidth variant="outline">
                       View
                     </Button>
                   </Link>
