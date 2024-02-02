@@ -1,8 +1,10 @@
 import "@mantine/core/styles.css";
 
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 
 import "./globals.css";
+import "@mantine/notifications/styles.css";
 
 export const metadata = {
   title: "FlavorFiesta",
@@ -16,7 +18,10 @@ export default function RootLayout({ children }) {
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider>
+          <Notifications />
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );
