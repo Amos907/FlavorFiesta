@@ -93,10 +93,10 @@ const Login = () => {
 
             <div className="flex">
               <Button
-                className="flex-1"
+                className="flex-1 text-white"
                 type="submit"
                 variant="outline"
-                color="black"
+                color="blue"
               >
                 Log in
               </Button>

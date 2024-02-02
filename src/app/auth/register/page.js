@@ -115,9 +115,9 @@ const Register = () => {
 
             <div className="flex">
               <Button
-                className="flex-1"
+                className="flex-1 text-white"
                 type="submit"
-                color="black"
+                color="blue"
                 variant="outline"
               >
                 Register
