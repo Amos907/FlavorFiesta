@@ -3,17 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { faker } from "@faker-js/faker";
 import { useRouter } from "next/navigation";
 import { ActionIcon, Button } from "@mantine/core";
 import { IconHeart } from "@tabler/icons-react";
+import { cleanUpText } from "../../../utils/cleaupResponse";
 
-const RecipeWidget = () => {
+const RecipeWidget = ({ recipe }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
-
-  const consume_data = process.env.NEXT_PUBLIC_FAKER_DATA_HEAVY === "true";
-
   const [liked, setLiked] = useState(false);
 
   const toggleLiked = () => {
@@ -31,16 +28,12 @@ const RecipeWidget = () => {
       <figure className="h-56 w-full rounded-t relative">
         <Image
           className="rounded"
-          src={faker.image.food(512, 512, consume_data)}
+          src={recipe.image}
           style={{ objectFit: "cover" }}
           fill
           sizes="100vw"
           alt=""
         />
-        {/* <div className="absolute top-1 left-1">
-                  <Badge>{faker.datatype.number(100)} Points</Badge>
-                </div> */}
-
         <div className="absolute -bottom-3 right-1">
           {user ? (
             <ActionIcon
@@ -80,16 +73,14 @@ const RecipeWidget = () => {
       </figure>
 
       <div className="w-full p-3">
-        <p className="text-lg font-bold capitalize mt-1">
-          {faker.lorem.words(2)}
-        </p>
+        <p className="text-lg font-bold capitalize mt-1">{recipe.title}</p>
 
-        <div className="text-gray-700 capitalize text-xs mt-[0.5]">
-          {faker.lorem.sentence()}
+        <div className="text-gray-700 font-sans capitalize text-sm mt-[0.5] h-10 overflow-hidden">
+          <p>{cleanUpText(recipe.summary)}</p>
         </div>
 
-        <div className="mt-3">
-          <Link href={`/recipe/${faker.number.int(10000)}`}>
+        <div className="pt-3">
+          <Link href={`/recipe/${recipe.id}`}>
             <Button fullWidth variant="outline">
               View
             </Button>

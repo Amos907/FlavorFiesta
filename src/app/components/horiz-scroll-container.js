@@ -2,8 +2,6 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import { faker } from "@faker-js/faker";
-import { IconStarFilled } from "@tabler/icons-react";
 import { Button } from "@mantine/core";
 import Link from "next/link";
 
@@ -53,18 +51,16 @@ export function HorizScrollContainer({ children }) {
   );
 }
 
-export function FlierCard() {
-  const consume_data = process.env.NEXT_PUBLIC_FAKER_DATA_HEAVY === "true";
-
+export function FlierCard({ recipe }) {
   return (
-    <div className=" bg-white rounded-md shadow-sm p-2">
+    <div className=" bg-white rounded-md shadow-sm p-2 border">
       <div className="relative h-48 w-48 lg:h-56 lg:w-52">
         <div className="static">
           <div>
             <figure>
               <Image
                 className="rounded border-none"
-                src={faker.image.food(512, 512, consume_data)}
+                src={recipe.image}
                 fill
                 sizes="100vw"
                 alt=""
@@ -74,23 +70,12 @@ export function FlierCard() {
         </div>
       </div>
 
-      <div className="py-2 space-y-2">
-        <div className="">
-          <p className="font-sans text-gray-600">{faker.lorem.sentence(2)}</p>
+      <div className="space-y-3">
+        <div className="max-h-20">
+          <p className="font-sans">{recipe.title}</p>
         </div>
 
-        <div className="">
-          <div className="flex items-center">
-            {faker.datatype.array(4).map((item) => (
-              <IconStarFilled
-                key={item}
-                size={18}
-                style={{ color: "yellow" }}
-              />
-            ))}
-          </div>
-        </div>
-        <Link href={`/recipe/${faker.number.int(10000)}`}>
+        <Link href={`/recipe/${recipe.id}`} className="pt-2">
           <Button size="sm" variant="outline">
             View
           </Button>
