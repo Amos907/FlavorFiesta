@@ -5,14 +5,22 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Autocomplete, Button } from "@mantine/core";
-import { IconSearch, IconUserCircle, IconCategory2 } from "@tabler/icons-react";
+import { IconSearch, IconLogout, IconCategory2 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 const TopNav = () => {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("recipes");
+    localStorage.removeItem("user");
+    router.push("/");
   };
 
   useEffect(() => {
@@ -59,7 +67,7 @@ const TopNav = () => {
                 <Autocomplete
                   variant="unstyled"
                   radius={0}
-                  placeholder="Search by item or merchant name"
+                  placeholder="Search Recipe"
                   data={["Merchant 1"]}
                 />
               </div>
@@ -78,7 +86,7 @@ const TopNav = () => {
                 {user ? (
                   <div>
                     <div className="flex items-center space-x-2">
-                      <Link href={`${user}/saved-recipes`}>
+                      <Link href={`/${user}/saved-recipes`}>
                         <figure className="h-7 w-7 relative cursor-pointer">
                           <Image
                             className="rounded-lg"
@@ -91,7 +99,13 @@ const TopNav = () => {
                         </figure>
                       </Link>
 
-                      <IconUserCircle size="2.5em" className="p-1 mr-2" />
+                      <div className="cursor-pointer">
+                        <IconLogout
+                          size="2.5em"
+                          className="p-1 mr-2"
+                          onClick={handleLogout}
+                        />
+                      </div>
                     </div>
                   </div>
                 ) : (

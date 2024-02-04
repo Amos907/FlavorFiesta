@@ -72,7 +72,7 @@ export default function Home() {
   }, [requestStatus.fetchRandomRecipesStatus, dispatch]);
 
   return (
-    <main main className="lg:px-40">
+    <main className="lg:px-40">
       <TopNav />
       <div className="py-0">
         {fact ? (

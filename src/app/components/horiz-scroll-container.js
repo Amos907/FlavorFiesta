@@ -53,7 +53,7 @@ export function HorizScrollContainer({ children }) {
 
 export function FlierCard({ recipe }) {
   return (
-    <div className=" bg-white rounded-md shadow-sm p-2 border">
+    <div className="bg-white rounded-md shadow-sm p-2 border">
       <div className="relative h-48 w-48 lg:h-56 lg:w-52">
         <div className="static">
           <div>

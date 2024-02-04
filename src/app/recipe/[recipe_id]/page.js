@@ -9,14 +9,18 @@ import {
   fetchRecipeInfo,
   fetchRandomRecipes,
 } from "@/redux/features/recipeSlice";
+import { useRouter } from "next/navigation";
 
 import { FlierCard } from "@/app/components/horiz-scroll-container";
 import TopNav from "@/app/components/layout/top-nav";
+import { IconChevronLeft } from "@tabler/icons-react";
 import { Button, Loader } from "@mantine/core";
 import { HorizScrollContainer } from "@/app/components/horiz-scroll-container";
 import { cleanUpText } from "../../../../utils/cleaupResponse";
+import { toggleRecipe, isSaved } from "../../../../utils/save-recipe";
 
 const Recipe = ({ params }) => {
+  const router = useRouter();
   const [user, setUser] = useState(null);
 
   const dispatch = useDispatch();
@@ -47,6 +51,19 @@ const Recipe = ({ params }) => {
       {requestStatus.fetchRecipeInfoStatus === "success" &&
       requestStatus.fetchRandomRecipesStatus === "success" ? (
         <div className="m-3">
+          <div className="px-2 float-right">
+            <Button
+              className=""
+              size="xs"
+              variant="outline"
+              leftIcon={<IconChevronLeft />}
+              onClick={() => {
+                router.back();
+              }}
+            >
+              Back
+            </Button>
+          </div>
           {recipeInfo ? (
             <div>
               <div className="flex flex-col-reverse justify-center md:flex-row md:items-center md:pt-6 md:pb-6 md:p-2 md:bg-light-200 rounded-lg lg:shadow-sm">
@@ -115,15 +132,41 @@ const Recipe = ({ params }) => {
                     )}
                   </div>
                   {user ? (
-                    <Button
-                      // onClick={}
-                      color="blue"
-                      variant="outline"
-                      fullWidth
-                      className="mt-4"
-                    >
-                      Save
-                    </Button>
+                    <div>
+                      {isSaved(recipeInfo.id) ? (
+                        <Button
+                          onClick={() =>
+                            toggleRecipe(
+                              recipeInfo.title,
+                              recipeInfo.id,
+                              recipeInfo.image
+                            )
+                          }
+                          color="red"
+                          variant="outline"
+                          fullWidth
+                          className="mt-4"
+                        >
+                          Saved
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() =>
+                            toggleRecipe(
+                              recipeInfo.title,
+                              recipeInfo.id,
+                              recipeInfo.image
+                            )
+                          }
+                          color="blue"
+                          variant="outline"
+                          fullWidth
+                          className="mt-4"
+                        >
+                          Save
+                        </Button>
+                      )}
+                    </div>
                   ) : (
                     <Link href="/auth/login">
                       <Button

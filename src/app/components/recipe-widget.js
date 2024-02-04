@@ -7,15 +7,11 @@ import { useRouter } from "next/navigation";
 import { ActionIcon, Button } from "@mantine/core";
 import { IconHeart } from "@tabler/icons-react";
 import { cleanUpText } from "../../../utils/cleaupResponse";
+import { toggleRecipe, isSaved } from "../../../utils/save-recipe";
 
 const RecipeWidget = ({ recipe }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [liked, setLiked] = useState(false);
-
-  const toggleLiked = () => {
-    setLiked(!liked);
-  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -37,14 +33,18 @@ const RecipeWidget = ({ recipe }) => {
         <div className="absolute -bottom-3 right-1">
           {user ? (
             <ActionIcon
-              onClick={toggleLiked}
               size="lg"
               className="bg-white shadow-md"
               variant="default"
               radius="xl"
             >
-              {liked ? (
-                <figure className="h-6 w-6 relative cursor-pointer">
+              {isSaved(recipe.id) ? (
+                <figure
+                  className="h-6 w-6 relative cursor-pointer"
+                  onClick={() =>
+                    toggleRecipe(recipe.title, recipe.id, recipe.image)
+                  }
+                >
                   <Image
                     className="rounded-lg"
                     src="/images/icons/heart.svg"
@@ -55,7 +55,12 @@ const RecipeWidget = ({ recipe }) => {
                   />
                 </figure>
               ) : (
-                <IconHeart className="flex items-center" />
+                <IconHeart
+                  className="flex items-center"
+                  onClick={() =>
+                    toggleRecipe(recipe.title, recipe.id, recipe.image)
+                  }
+                />
               )}
             </ActionIcon>
           ) : (
