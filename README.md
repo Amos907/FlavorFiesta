@@ -64,6 +64,7 @@ _**Evaluation Criteria:**_
 
 _**Submission Guidelines:**_
 
+- Branch out from "kontorva\_lab"
 - Create a pull request using the base "kontorva\_lab"
 - Title format "Web Challenge - FIRST\_NAME LAST\_NAME"
 - Write a description about your implementation and submit a pull request with your solution.
