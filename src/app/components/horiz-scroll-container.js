@@ -70,16 +70,18 @@ export function FlierCard({ recipe }) {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="max-h-20">
-          <p className="font-sans">{recipe.title}</p>
+      <div className="space-y-2 mt-2">
+        <div className="max-h-20 text-center">
+          <p className="text-sm font-sans font-semibold">{recipe.title}</p>
         </div>
 
-        <Link href={`/recipe/${recipe.id}`} className="pt-2">
-          <Button size="sm" variant="outline">
-            View
-          </Button>
-        </Link>
+        <div className="flex justify-center pb-2">
+          <Link href={`/recipe/${recipe.id}`} className="pt-2">
+            <Button size="sm" variant="outline">
+              View
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
