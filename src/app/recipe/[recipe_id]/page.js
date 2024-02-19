@@ -15,6 +15,7 @@ import { FlierCard } from "@/app/components/horiz-scroll-container";
 import TopNav from "@/app/components/layout/top-nav";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { Button, Loader } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { HorizScrollContainer } from "@/app/components/horiz-scroll-container";
 import { cleanUpText } from "../../../../utils/cleaupResponse";
 import { toggleRecipe, isSaved } from "../../../../utils/save-recipe";
@@ -29,6 +30,28 @@ const Recipe = ({ params }) => {
   );
 
   const recipe_id = params.recipe_id;
+
+  const [isRecipeSaved, setIsRecipeSaved] = useState(isSaved(recipeInfo.id));
+
+  const toggleRecipeSave = ({ title, id, image }) => {
+    setIsRecipeSaved(!isRecipeSaved);
+
+    if (isRecipeSaved(id)) {
+      notifications.show({
+        title: "Saved.",
+        message: "Recipe added to collection!!",
+        color: "green",
+      });
+    } else {
+      notifications.show({
+        title: "Deleted.",
+        message: "Recipe removed from collection!!",
+        color: "red",
+      });
+    }
+
+    toggleRecipe(title, id, image);
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -51,7 +74,10 @@ const Recipe = ({ params }) => {
       {requestStatus.fetchRecipeInfoStatus === "success" &&
       requestStatus.fetchRandomRecipesStatus === "success" ? (
         <div className="m-3">
-          <div className="px-2 float-right">
+          <div className="px-2 flex justify-between py-2">
+            <p className="text-xl font-sans text-primary font-bold">
+              Recipe Info
+            </p>
             <Button
               className=""
               size="xs"
@@ -102,18 +128,23 @@ const Recipe = ({ params }) => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="pt-2">
-                      <p className="font-sans text-lg font-bold text-primary">
-                        Dish Types
-                      </p>
-                      <div className="space-y-2">
-                        {recipeInfo.dishTypes.map((dish) => (
-                          <p key={dish} className="text-gray-700 font-sans">
-                            {dish}
-                          </p>
-                        ))}
+                    {recipeInfo.dishTypes.length != 0 ? (
+                      <div className="pt-2">
+                        <p className="font-sans text-lg font-bold text-primary">
+                          Dish Types
+                        </p>
+                        <div className="space-y-2">
+                          {recipeInfo.dishTypes.map((dish) => (
+                            <p key={dish} className="text-gray-700 font-sans">
+                              {dish}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <></>
+                    )}
+
                     {recipeInfo.winePairing.pairedWines ? (
                       <div className="pt-2">
                         <p className="font-sans text-lg font-bold text-primary">
@@ -136,7 +167,7 @@ const Recipe = ({ params }) => {
                       {isSaved(recipeInfo.id) ? (
                         <Button
                           onClick={() =>
-                            toggleRecipe(
+                            toggleRecipeSave(
                               recipeInfo.title,
                               recipeInfo.id,
                               recipeInfo.image
@@ -152,7 +183,7 @@ const Recipe = ({ params }) => {
                       ) : (
                         <Button
                           onClick={() =>
-                            toggleRecipe(
+                            toggleRecipeSave(
                               recipeInfo.title,
                               recipeInfo.id,
                               recipeInfo.image
