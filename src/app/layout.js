@@ -17,13 +17,13 @@ import "@mantine/notifications/styles.css";
 // };
 
 export default function RootLayout({ children }) {
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then((registration) => console.log("scope is: ", registration.scope));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ("serviceWorker" in navigator) {
+  //     navigator.serviceWorker
+  //       .register("/service-worker.js")
+  //       .then((registration) => console.log("scope is: ", registration.scope));
+  //   }
+  // }, []);
 
   return (
     <html lang="en">

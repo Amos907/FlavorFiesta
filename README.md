@@ -1,6 +1,6 @@
 # Recipe Web Application with Next.js
 
-This is a web application built using Next.js v14.0.1 to display recipes. It utilizes Redux for state management, Mantine for UI components, and fetches recipe data from the Spoonacular API.
+This is a web application built using Next.js to display recipes. It utilizes Redux for state management, Mantine for UI components, and fetches recipe data from the Spoonacular API.
 
 ## Features
 
@@ -10,7 +10,7 @@ This is a web application built using Next.js v14.0.1 to display recipes. It uti
 
 ## Technologies Used
 
-- Next.js v14.0.1
+- Next.js
 - Redux for state management
 - Mantine for UI components
 - Tailwind CSS for styling

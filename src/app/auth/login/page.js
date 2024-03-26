@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { TextInput, PasswordInput, Button } from "@mantine/core";
 import Link from "next/link";
@@ -13,6 +13,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const router = useRouter();
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const form = useForm({
     initialValues: {
@@ -25,12 +27,43 @@ const Login = () => {
     },
   });
 
-  const authenticateUser = ({ email, password }) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        localStorage.setItem("user", user.email);
+  // const authenticateUser = ({ email, password }) => {
+  //   signInWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       const user = userCredential.user;
+  //       localStorage.setItem("user", user.email);
 
+  //       notifications.show({
+  //         title: "Success",
+  //         message: "Login Successful!",
+  //         color: "green",
+  //       });
+
+  //       router.push("/");
+  //     })
+  //     .catch((error) => {
+  //       notifications.show({
+  //         title: "Failed",
+  //         message: error.message,
+  //         color: "red",
+  //       });
+  //     });
+  // };
+
+  const authenticateUser = async (formData) => {
+    try {
+      const res = await fetch(`http://localhost:5000/auth/login`, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (data.user) {
         notifications.show({
           title: "Success",
           message: "Login Successful!",
@@ -38,14 +71,19 @@ const Login = () => {
         });
 
         router.push("/");
-      })
-      .catch((error) => {
-        notifications.show({
-          title: "Failed",
-          message: error.message,
-          color: "red",
-        });
+      }
+
+      if (data.errors) {
+        setEmailError(data.errors.email);
+        setPasswordError(data.errors.password);
+      }
+    } catch (err) {
+      notifications.show({
+        title: "Login Failed",
+        message: error.message,
+        color: "red",
       });
+    }
   };
 
   return (
@@ -85,11 +123,15 @@ const Login = () => {
               {...form.getInputProps("email")}
             />
 
+            <p className="text-red-500 text-xs">{emailError}</p>
+
             <PasswordInput
               label="Password"
               placeholder="Password"
               {...form.getInputProps("password")}
             />
+
+            <p className="text-red-500 text-xs">{passwordError}</p>
 
             <div className="flex">
               <Button

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { TextInput, PasswordInput, Button } from "@mantine/core";
 import Link from "next/link";
@@ -14,6 +14,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Register = () => {
   const router = useRouter();
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const form = useForm({
     initialValues: {
       email: "",
@@ -24,7 +26,7 @@ const Register = () => {
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       password: (value) => {
-        if (value.length < 8) {
+        if (value.length < 6) {
           return "Password must be at least 8 characters long";
         }
         return null;
@@ -38,27 +40,59 @@ const Register = () => {
     },
   });
 
-  const registerUser = ({ email, password }) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        localStorage.setItem("user", user.email);
+  // const registerUser = ({ email, password }) => {
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       const user = userCredential.user;
+  //       localStorage.setItem("user", user.email);
 
+  //       notifications.show({
+  //         title: "Success",
+  //         message: "Account Creation Successful!",
+  //         color: "green",
+  //       });
+
+  //       router.push("/");
+  //     })
+  //     .catch((error) => {
+  //       notifications.show({
+  //         title: "Failed",
+  //         message: error.message,
+  //         color: "red",
+  //       });
+  //     });
+  // };
+
+  const registerUser = async (formData) => {
+    const { email, password } = formData;
+    try {
+      const res = await fetch(`http://localhost:5000/auth/register`, {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      if (data.user) {
         notifications.show({
           title: "Success",
-          message: "Account Creation Successful!",
+          message: "User registration successful!",
           color: "green",
         });
 
         router.push("/");
-      })
-      .catch((error) => {
-        notifications.show({
-          title: "Failed",
-          message: error.message,
-          color: "red",
-        });
-      });
+      }
+
+      if (data.errors) {
+        setEmailError(data.errors.email);
+        setPasswordError(data.errors.password);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -99,12 +133,16 @@ const Register = () => {
               {...form.getInputProps("email")}
             />
 
+            <p className="text-red-500 text-xs">{emailError}</p>
+
             <PasswordInput
               withAsterisk
               placeholder="Password"
               label="Password"
               {...form.getInputProps("password")}
             />
+
+            <p className="text-red-500 text-xs">{passwordError}</p>
 
             <PasswordInput
               withAsterisk
