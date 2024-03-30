@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["spoonacular.com", "loremflickr.com"],
+    domains: ["img.spoonacular.com", "spoonacular.com", "loremflickr.com"],
   },
 
   env: {
@@ -15,6 +15,8 @@ const nextConfig = {
     PROJECT_ID: process.env.PROJECT_ID,
     AUTH_DOMAIN: process.env.AUTH_DOMAIN,
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+
+    JWT_SECRET: process.env.JWT_SECRET,
   },
 };
 

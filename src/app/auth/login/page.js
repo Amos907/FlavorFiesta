@@ -80,7 +80,7 @@ const Login = () => {
     } catch (err) {
       notifications.show({
         title: "Login Failed",
-        message: error.message,
+        message: err.message,
         color: "red",
       });
     }
