@@ -12,13 +12,14 @@ import {
 import { useRouter } from "next/navigation";
 
 import { FlierCard } from "@/app/components/horiz-scroll-container";
-import TopNav from "@/app/components/layout/top-nav";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { Button, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { HorizScrollContainer } from "@/app/components/horiz-scroll-container";
 import { cleanUpText } from "../../../../utils/cleaupResponse";
 import { toggleRecipe, isSaved } from "../../../../utils/save-recipe";
+
+import TopNav from "@/app/components/layout/top-nav";
 
 const Recipe = ({ params }) => {
   const router = useRouter();
@@ -70,7 +71,6 @@ const Recipe = ({ params }) => {
   return (
     <main className="lg:px-40">
       <TopNav />
-
       {requestStatus.fetchRecipeInfoStatus === "success" &&
       requestStatus.fetchRandomRecipesStatus === "success" ? (
         <div className="m-3">

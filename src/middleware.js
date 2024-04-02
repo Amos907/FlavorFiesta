@@ -1,27 +1,7 @@
-import { NextResponse } from "next/server";
-import Jwt from "jsonwebtoken";
+import { authCheck } from "../lib";
 
 export async function middleware(request) {
-  console.log("Running Middleware!");
-  const token = request.cookies.get("jwt");
-  if (!token) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
-
-  try {
-    const decodedToken = Jwt.verify(token.value, process.env.JWT_SECRET);
-    return NextResponse.next();
-  } catch (err) {
-    if (err.name === "JsonWebTokenError") {
-      // Check for specific error type
-      console.log("JsonWebTokenError");
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    } else {
-      // Handle other potential errors here (optional)
-      console.error("Unexpected error:", err);
-      return NextResponse.next(); // Or handle differently based on error
-    }
-  }
+  return await authCheck(request);
 }
 
 export const config = {
@@ -33,6 +13,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|auth).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|auth|recipe|$).*)",
   ],
 };

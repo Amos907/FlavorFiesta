@@ -7,10 +7,12 @@ import Image from "next/image";
 import { Autocomplete, Button } from "@mantine/core";
 import { IconSearch, IconLogout, IconCategory2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { getSession } from "../../../../lib";
 
 const TopNav = () => {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState();
+  const [session, setSession] = useState();
   const [showMenu, setShowMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -24,9 +26,19 @@ const TopNav = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setUser((initialUser) => (initialUser = localStorage.getItem("user")));
-    }
+    const checkAuth = async () => {
+      setIsLoading(true);
+      try {
+        const session = await getSession();
+        setSession(session);
+      } catch (error) {
+        console.error("Error fetching session:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   return (
@@ -82,62 +94,66 @@ const TopNav = () => {
                 <IconSearch size="2em" className="p-1 mr-2" />
               </div>
 
-              <div>
-                {user ? (
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <Link href={`/${user}/saved-recipes`}>
-                        <figure className="h-7 w-7 relative cursor-pointer">
-                          <Image
-                            className="rounded-lg"
-                            src="/images/icons/heart.svg"
-                            style={{ objectFit: "cover" }}
-                            fill
-                            sizes="100vw"
-                            alt=""
-                          />
-                        </figure>
-                      </Link>
+              {isLoading ? (
+                <></>
+              ) : (
+                <div>
+                  {session ? (
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <Link href={`/${session.payload.id}/saved-recipes`}>
+                          <figure className="h-7 w-7 relative cursor-pointer">
+                            <Image
+                              className="rounded-lg"
+                              src="/images/icons/heart.svg"
+                              style={{ objectFit: "cover" }}
+                              fill
+                              sizes="100vw"
+                              alt=""
+                            />
+                          </figure>
+                        </Link>
 
-                      <div className="cursor-pointer">
-                        <IconLogout
-                          size="2.5em"
-                          className="p-1 mr-2"
-                          onClick={handleLogout}
+                        <div className="cursor-pointer">
+                          <IconLogout
+                            size="2.5em"
+                            className="p-1 mr-2"
+                            onClick={handleLogout}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="md:hidden">
+                        <IconCategory2
+                          className="my-auto cursor-pointer"
+                          size={36}
+                          onClick={toggleMenu}
                         />
                       </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="md:hidden">
-                      <IconCategory2
-                        className="my-auto cursor-pointer"
-                        size={36}
-                        onClick={toggleMenu}
-                      />
-                    </div>
 
-                    <div className="hidden md:flex flex-1 items-center ml-3">
-                      <div className="mr-2">
-                        <Link href="/auth/login">
-                          <Button variant="outline" color="blue">
-                            Login
-                          </Button>
-                        </Link>
-                      </div>
+                      <div className="hidden md:flex flex-1 items-center ml-3">
+                        <div className="mr-2">
+                          <Link href="/auth/login">
+                            <Button variant="outline" color="blue">
+                              Login
+                            </Button>
+                          </Link>
+                        </div>
 
-                      <div className="mr-2">
-                        <Link href="/auth/register">
-                          <Button variant="outline" color="green">
-                            Register
-                          </Button>
-                        </Link>
+                        <div className="mr-2">
+                          <Link href="/auth/register">
+                            <Button variant="outline" color="green">
+                              Register
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           {showMenu ? (

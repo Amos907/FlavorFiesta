@@ -9,9 +9,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
-import { auth } from "../../../../lib/firebase/firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
 const Register = () => {
   const router = useRouter();
   const [emailError, setEmailError] = useState("");
@@ -39,29 +36,6 @@ const Register = () => {
       },
     },
   });
-
-  // const registerUser = ({ email, password }) => {
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //     .then((userCredential) => {
-  //       const user = userCredential.user;
-  //       localStorage.setItem("user", user.email);
-
-  //       notifications.show({
-  //         title: "Success",
-  //         message: "Account Creation Successful!",
-  //         color: "green",
-  //       });
-
-  //       router.push("/");
-  //     })
-  //     .catch((error) => {
-  //       notifications.show({
-  //         title: "Failed",
-  //         message: error.message,
-  //         color: "red",
-  //       });
-  //     });
-  // };
 
   const registerUser = async (formData) => {
     const { email, password } = formData;

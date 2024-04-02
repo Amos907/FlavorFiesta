@@ -8,9 +8,6 @@ import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
 
-import { auth } from "../../../../lib/firebase/firebase-config";
-import { signInWithEmailAndPassword } from "firebase/auth";
-
 const Login = () => {
   const router = useRouter();
   const [emailError, setEmailError] = useState("");
@@ -26,29 +23,6 @@ const Login = () => {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     },
   });
-
-  // const authenticateUser = ({ email, password }) => {
-  //   signInWithEmailAndPassword(auth, email, password)
-  //     .then((userCredential) => {
-  //       const user = userCredential.user;
-  //       localStorage.setItem("user", user.email);
-
-  //       notifications.show({
-  //         title: "Success",
-  //         message: "Login Successful!",
-  //         color: "green",
-  //       });
-
-  //       router.push("/");
-  //     })
-  //     .catch((error) => {
-  //       notifications.show({
-  //         title: "Failed",
-  //         message: error.message,
-  //         color: "red",
-  //       });
-  //     });
-  // };
 
   const authenticateUser = async (formData) => {
     try {

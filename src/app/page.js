@@ -12,12 +12,13 @@ import {
   HorizScrollContainer,
   FlierCard,
 } from "./components/horiz-scroll-container";
-import TopNav from "./components/layout/top-nav";
+
 import { fruitsData } from "../../utils/fruits-data";
 import { cuisineNames } from "../../utils/cuisine-names";
 import RecipeWidget from "./components/recipe-widget";
 
 import { Loader } from "@mantine/core";
+import TopNav from "./components/layout/top-nav";
 
 export default function Home() {
   const { cuisineRecipes, randomRecipes, requestStatus } = useSelector(
