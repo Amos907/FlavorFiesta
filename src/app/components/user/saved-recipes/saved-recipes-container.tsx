@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import SavedRecipeWidget from "./saved-recipe-widget";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { Button } from "@mantine/core";
+import { Recipe } from "../../../recipe/recipe";
 
-const SavedRecipesContainer = ({ userId }) => {
+const SavedRecipesContainer = () => {
   const router = useRouter();
   const [savedRecipes, setSavedRecipes] = useState([]);
+  // console.log(userId);
   return (
     <>
       <div className="px-2 flex justify-between">
@@ -19,7 +21,7 @@ const SavedRecipesContainer = ({ userId }) => {
           className=""
           size="xs"
           variant="outline"
-          leftIcon={<IconChevronLeft />}
+          // leftIcon={<IconChevronLeft />}
           onClick={() => {
             router.back();
           }}
@@ -29,7 +31,7 @@ const SavedRecipesContainer = ({ userId }) => {
       </div>
       {savedRecipes.length > 0 ? (
         <div className="space-y-2 md:grid grid-cols-3 lg:grid-cols-4 gap-4">
-          {savedRecipes.map((recipe) => (
+          {savedRecipes.map<JSX.Element>((recipe: Recipe) => (
             <SavedRecipeWidget recipe={recipe} key={recipe.id} />
           ))}
         </div>

@@ -1,6 +1,7 @@
 import { authCheck } from "../lib";
+import { NextRequest } from "next/server";
 
-export async function middleware(request) {
+export async function middleware(request: NextRequest) {
   return await authCheck(request);
 }
 

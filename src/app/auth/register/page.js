@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
+import { register } from "../../../../lib";
+
 const Register = () => {
   const router = useRouter();
   const [emailError, setEmailError] = useState("");
@@ -36,38 +38,6 @@ const Register = () => {
       },
     },
   });
-
-  const registerUser = async (formData) => {
-    const { email, password } = formData;
-    try {
-      const res = await fetch(`http://localhost:5000/auth/register`, {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      const data = await res.json();
-      if (data.user) {
-        notifications.show({
-          title: "Success",
-          message: "User registration successful!",
-          color: "green",
-        });
-
-        router.push("/");
-      }
-
-      if (data.errors) {
-        setEmailError(data.errors.email);
-        setPasswordError(data.errors.password);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <section className="bg-fixed h-screen relative flex justify-center items-center">
@@ -98,7 +68,31 @@ const Register = () => {
         <div className="">
           <form
             className="space-y-2"
-            onSubmit={form.onSubmit((values) => registerUser(values))}
+            onSubmit={form.onSubmit(async ({ email, password }) => {
+              try {
+                const data = await register({ email, password });
+                if (data.user) {
+                  notifications.show({
+                    title: "Success",
+                    message: "User registration successful!",
+                    color: "green",
+                  });
+
+                  router.push("/");
+                }
+
+                if (data.errors) {
+                  setEmailError(data.errors.email);
+                  setPasswordError(data.errors.password);
+                }
+              } catch (err) {
+                notifications.show({
+                  title: "Failed",
+                  message: "User registration failed!",
+                  color: "red",
+                });
+              }
+            })}
           >
             <TextInput
               withAsterisk

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Button } from "@mantine/core";
 import Link from "next/link";
 
+import { Recipe } from "../recipe/recipe";
+
 export function HorizScrollContainer({ children }) {
   const containerRef = useRef(null);
 
@@ -51,7 +53,7 @@ export function HorizScrollContainer({ children }) {
   );
 }
 
-export function FlierCard({ recipe }) {
+export function FlierCard({ recipe }: { recipe: Recipe }) {
   return (
     <div className="bg-white rounded-md shadow-sm p-2 border">
       <div className="relative h-48 w-48 lg:h-56 lg:w-52">

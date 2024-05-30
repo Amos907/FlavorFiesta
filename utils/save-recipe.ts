@@ -1,7 +1,12 @@
-export const toggleRecipe = (name, id, image) => {
-  const existingRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
+import { Recipe } from "../src/app/recipe/recipe";
 
-  const recipeExists = existingRecipes.some((recipe) => recipe.id === id);
+export const toggleRecipe = (recipe: Recipe) => {
+  const existingRecipes: string[] | null = JSON.parse(
+    localStorage.getItem("recipes")
+  );
+  const recipeExists: boolean = existingRecipes.some<boolean>(
+    (recipe: Recipe) => recipe.id === id
+  );
 
   if (recipeExists) {
     const indexToRemove = existingRecipes.findIndex(

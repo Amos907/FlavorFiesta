@@ -4,29 +4,32 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import {
-  fetchRecipeInfo,
   fetchRandomRecipes,
-} from "@/redux/features/recipeSlice";
+  fetchRecipeInfo,
+} from "../../../redux/features/recipeSlice";
 import { useRouter } from "next/navigation";
 
-import { FlierCard } from "@/app/components/horiz-scroll-container";
+import {
+  HorizScrollContainer,
+  FlierCard,
+} from "../../components/horiz-scroll-container";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { Button, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { HorizScrollContainer } from "@/app/components/horiz-scroll-container";
 import { cleanUpText } from "../../../../utils/cleaupResponse";
 import { toggleRecipe, isSaved } from "../../../../utils/save-recipe";
 
-import TopNav from "@/app/components/layout/top-nav";
+import TopNav from "../../components/layout/top-nav";
+import { Recipe } from "../recipe";
 
-const Recipe = ({ params }) => {
+const RecipePage = ({ params }: { params: any }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
 
-  const dispatch = useDispatch();
-  const { recipeInfo, randomRecipes, requestStatus } = useSelector(
+  const dispatch = useAppDispatch();
+  const { recipeInfo, randomRecipes, requestStatus } = useAppSelector(
     (state) => state.recipe
   );
 
@@ -34,10 +37,10 @@ const Recipe = ({ params }) => {
 
   const [isRecipeSaved, setIsRecipeSaved] = useState(isSaved(recipeInfo.id));
 
-  const toggleRecipeSave = ({ title, id, image }) => {
+  const toggleRecipeSave = (recipe: Recipe) => {
     setIsRecipeSaved(!isRecipeSaved);
 
-    if (isRecipeSaved(id)) {
+    if (isRecipeSaved(recipe.id)) {
       notifications.show({
         title: "Saved.",
         message: "Recipe added to collection!!",
@@ -51,7 +54,7 @@ const Recipe = ({ params }) => {
       });
     }
 
-    toggleRecipe(title, id, image);
+    toggleRecipe(recipe);
   };
 
   useEffect(() => {
@@ -60,7 +63,7 @@ const Recipe = ({ params }) => {
     }
 
     if (recipe_id) {
-      dispatch(fetchRecipeInfo({ recipeId: parseInt(recipe_id) }));
+      dispatch(fetchRecipeInfo({ recipe_id }));
     }
 
     if (requestStatus.fetchRandomRecipesStatus === "idle") {
@@ -314,4 +317,4 @@ const Recipe = ({ params }) => {
   );
 };
 
-export default Recipe;
+export default RecipePage;

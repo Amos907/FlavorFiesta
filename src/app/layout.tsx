@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { store } from "@/redux/store";
+import React, { useEffect } from "react";
+import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import "@mantine/core/styles.css";
 
@@ -16,7 +16,11 @@ import "@mantine/notifications/styles.css";
 //   description: "Explore foreign recipies and cuisines",
 // };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   // useEffect(() => {
   //   if ("serviceWorker" in navigator) {
   //     navigator.serviceWorker

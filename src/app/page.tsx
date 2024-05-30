@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   fetchCuisineRecipes,
   fetchRandomRecipes,
@@ -20,17 +20,19 @@ import RecipeWidget from "./components/recipe-widget";
 import { Loader } from "@mantine/core";
 import TopNav from "./components/layout/top-nav";
 
+import { Recipe } from "./recipe/recipe";
+
 export default function Home() {
-  const { cuisineRecipes, randomRecipes, requestStatus } = useSelector(
+  const { cuisineRecipes, randomRecipes, requestStatus } = useAppSelector(
     (state) => state.recipe
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const [fact, setFact] = useState(null);
+  const [fact, setFact] = useState<number | null>(null);
 
-  const [cuisine, setCuisine] = useState(0);
+  const [cuisine, setCuisine] = useState<string | null>("");
 
-  const is24HoursPassed = (lastUpdateTime) => {
+  const is24HoursPassed = (lastUpdateTime: string | null): boolean => {
     const currentTime = new Date().getTime();
     return (
       !lastUpdateTime ||
@@ -39,32 +41,30 @@ export default function Home() {
   };
 
   useEffect(() => {
-    let new_cusine = Math.round(Math.random() * (20 - 0) + 0);
+    let new_cusine: number = Math.round(Math.random() * (20 - 0) + 0);
 
     if (typeof window !== "undefined") {
       if (!localStorage.getItem("lastUpdetTime")) {
-        localStorage.setItem("lastUpdateTime", new Date().getTime());
+        localStorage.setItem("lastUpdateTime", new Date().getTime().toString());
       }
 
       if (!localStorage.getItem("cuisine")) {
-        localStorage.setItem("cuisine", cuisineNames[4]);
+        localStorage.setItem("cuisine", cuisineNames[new_cusine]);
       }
 
-      setCuisine(localStorage.getItem("cuisine"));
+      let cuisine: string | null = localStorage.getItem("cuisine");
 
-      dispatch(
-        fetchCuisineRecipes({
-          cusine: cuisineNames[localStorage.getItem("cuisine")],
-        })
-      );
+      setCuisine(cuisine);
+
+      dispatch(fetchCuisineRecipes(cuisine));
     }
 
     if (is24HoursPassed(localStorage.getItem("lastRequestTime"))) {
-      localStorage.setItem("lastRequestTime", new Date().getTime());
-      localStorage.setItem("cuisine", new_cusine);
+      localStorage.setItem("lastRequestTime", new Date().getTime().toString());
+      localStorage.setItem("cuisine", cuisineNames[new_cusine]);
     }
 
-    let new_fact = Math.random() * (15 - 0) + 0;
+    let new_fact: number = Math.random() * (15 - 0) + 0;
     setFact((initialFact) => (initialFact = Math.round(new_fact)));
 
     if (requestStatus.fetchRandomRecipesStatus === "idle") {
@@ -103,15 +103,14 @@ export default function Home() {
 
       <div className="m-4">
         <p className="text-xl font-bold font-sans text-primary py-2">
-          Cuisine of the Day:{" "}
-          <span className="text-2xl">{cuisineNames[cuisine]}</span>
+          Cuisine of the Day: <span className="text-2xl">{cuisine}</span>
         </p>
 
         {requestStatus.fetchCuisineRecipesStatus === "success" &&
         cuisineRecipes.results ? (
           <div className="bg-gray-100 pt-2 px-2">
             <HorizScrollContainer>
-              {cuisineRecipes.results.map((recipe) => (
+              {cuisineRecipes.results.map<JSX.Element>((recipe: Recipe) => (
                 <FlierCard key={recipe.id} recipe={recipe} />
               ))}
             </HorizScrollContainer>
@@ -130,7 +129,7 @@ export default function Home() {
         {requestStatus.fetchRandomRecipesStatus === "success" &&
         randomRecipes.recipes ? (
           <div className="space-y-2 md:grid grid-cols-3 lg:grid-cols-4 gap-4">
-            {randomRecipes.recipes.map((recipe) => (
+            {randomRecipes.recipes.map<JSX.Element>((recipe: Recipe) => (
               <RecipeWidget key={recipe.id} recipe={recipe} />
             ))}
           </div>

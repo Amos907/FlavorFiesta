@@ -1,9 +1,50 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Recipe } from "../../app/recipe/recipe";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
-const initialState = {
-  cuisineRecipes: [],
-  randomRecipes: [],
-  recipeInfo: {},
+interface RequestError {
+  operation: string;
+  message?: string;
+}
+
+type Status = "idle" | "loading" | "success" | "failled";
+
+type CuisineRecipes = {
+  results: Recipe[];
+};
+
+type RandomRecipes = {
+  recipes: Recipe[];
+};
+
+type RequestStatus = {
+  fetchCuisineRecipesStatus: Status;
+  fetchRandomRecipesStatus: Status;
+  fetchRecipeInfoStatus: Status;
+  fetchSimilarRecipesStatus: Status;
+};
+
+interface RecipeState {
+  cuisineRecipes: CuisineRecipes;
+  randomRecipes: RandomRecipes;
+  recipeInfo: Recipe;
+  similarRecipes: Recipe[];
+  requestErrors: RequestError[];
+  requestStatus: RequestStatus;
+}
+
+const initialState: RecipeState = {
+  cuisineRecipes: {
+    results: [],
+  },
+  randomRecipes: {
+    recipes: [],
+  },
+  recipeInfo: {
+    title: "",
+    image: "",
+  },
   similarRecipes: [],
   requestErrors: [],
   requestStatus: {
@@ -16,9 +57,9 @@ const initialState = {
 
 export const fetchCuisineRecipes = createAsyncThunk(
   "recipe/fetchCuisineRecipes",
-  async (payload) => {
+  async (cuisine: string | null) => {
     const res = await fetch(
-      `${process.env.BASE_URL}/recipes/complexSearch?apiKey=${process.env.SPOONACULAR_API_KEY}&cuisine=${payload.cusine}&number=10`
+      `${process.env.BASE_URL}/recipes/complexSearch?apiKey=${process.env.SPOONACULAR_API_KEY}&cuisine=${cuisine}&number=10`
     );
 
     return await res.json();
@@ -38,9 +79,9 @@ export const fetchRandomRecipes = createAsyncThunk(
 
 export const fetchRecipeInfo = createAsyncThunk(
   "recipe/fetchRecipeInfo",
-  async (payload) => {
+  async (id: string) => {
     const res = await fetch(
-      `${process.env.BASE_URL}/recipes/${payload.recipeId}/information?apiKey=${process.env.SPOONACULAR_API_KEY}`
+      `${process.env.BASE_URL}/recipes/${id}/information?apiKey=${process.env.SPOONACULAR_API_KEY}`
     );
 
     return await res.json();
@@ -49,9 +90,9 @@ export const fetchRecipeInfo = createAsyncThunk(
 
 export const fetchSimilarRecipes = createAsyncThunk(
   "recipe/fetchSimilarRecipes",
-  async (payload) => {
+  async (id: string) => {
     const res = await fetch(
-      `${process.env.BASE_URL}/recipes/${payload.recipeId}/similar?apiKey=${process.env.SPOONACULAR_API_KEY}&number=15`
+      `${process.env.BASE_URL}/recipes/${id}/similar?apiKey=${process.env.SPOONACULAR_API_KEY}&number=15`
     );
 
     return await res.json();
@@ -74,7 +115,10 @@ const recipeSlice = createSlice({
 
     builder.addCase(fetchCuisineRecipes.rejected, (state, action) => {
       state.requestStatus.fetchCuisineRecipesStatus = "failled";
-      state.requestErrors.push({ fetchCuisineRecipes: action.error.message });
+      state.requestErrors.push({
+        operation: "fetchCuisineRecipes",
+        message: action.error.message,
+      });
     });
 
     builder.addCase(fetchRandomRecipes.pending, (state) => {
@@ -88,7 +132,10 @@ const recipeSlice = createSlice({
 
     builder.addCase(fetchRandomRecipes.rejected, (state, action) => {
       state.requestStatus.fetchRandomRecipesStatus = "failled";
-      state.requestErrors.push({ fetchRandomRecipes: action.error.message });
+      state.requestErrors.push({
+        operation: "fetchRandomRecipes",
+        message: action.error.message,
+      });
     });
 
     builder.addCase(fetchRecipeInfo.pending, (state) => {
@@ -102,7 +149,10 @@ const recipeSlice = createSlice({
 
     builder.addCase(fetchRecipeInfo.rejected, (state, action) => {
       state.requestStatus.fetchRecipeInfoStatus = "failled";
-      state.requestErrors.push({ fetchRecipeInfo: action.error.message });
+      state.requestErrors.push({
+        operation: "fetchRecipeInfo",
+        message: action.error.message,
+      });
     });
 
     builder.addCase(fetchSimilarRecipes.pending, (state) => {
@@ -116,7 +166,10 @@ const recipeSlice = createSlice({
 
     builder.addCase(fetchSimilarRecipes.rejected, (state, action) => {
       state.requestStatus.fetchSimilarRecipesStatus = "failled";
-      state.requestErrors.push({ fetchSimilarRecipes: action.error.message });
+      state.requestErrors.push({
+        operation: "fetchSimilarRecipes",
+        message: action.error.message,
+      });
     });
   },
 });

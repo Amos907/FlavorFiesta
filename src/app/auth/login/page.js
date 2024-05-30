@@ -8,6 +8,8 @@ import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
 
+import { login } from "../../../../lib";
+
 const Login = () => {
   const router = useRouter();
   const [emailError, setEmailError] = useState("");
@@ -24,51 +26,15 @@ const Login = () => {
     },
   });
 
-  const authenticateUser = async (formData) => {
-    try {
-      const res = await fetch(`http://localhost:5000/auth/login`, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      const data = await res.json();
-
-      if (data.user) {
-        notifications.show({
-          title: "Success",
-          message: "Login Successful!",
-          color: "green",
-        });
-
-        router.push("/");
-      }
-
-      if (data.errors) {
-        setEmailError(data.errors.email);
-        setPasswordError(data.errors.password);
-      }
-    } catch (err) {
-      notifications.show({
-        title: "Login Failed",
-        message: err.message,
-        color: "red",
-      });
-    }
-  };
-
   return (
     <section className="bg-fixed h-screen relative flex justify-center items-center">
       <div className="absolute inset-0 z-10">
         <figure>
           <Image
             src="/images/backgrounds/bg.jpg"
-            layout="fill"
-            objectFit="cover"
+            fill
             alt="Background Image"
+            priority
           />
         </figure>
       </div>
@@ -82,6 +48,7 @@ const Login = () => {
               width={150}
               height={150}
               alt=""
+              priority
             />
           </figure>
         </div>
@@ -89,7 +56,31 @@ const Login = () => {
         <div className="">
           <form
             className="space-y-2"
-            onSubmit={form.onSubmit((values) => authenticateUser(values))}
+            onSubmit={form.onSubmit(async (formData) => {
+              try {
+                const data = await login(formData);
+                if (data.user) {
+                  notifications.show({
+                    title: "Success",
+                    message: "User login successful!",
+                    color: "green",
+                  });
+
+                  router.push("/");
+                }
+
+                if (data.errors) {
+                  setEmailError(data.errors.email);
+                  setPasswordError(data.errors.password);
+                }
+              } catch (err) {
+                notifications.show({
+                  title: "Failed",
+                  message: err.message,
+                  color: "red",
+                });
+              }
+            })}
           >
             <TextInput
               label="Email"
